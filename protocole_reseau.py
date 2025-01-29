@@ -2,7 +2,7 @@
 OC Robotique 2025
 Template pour librairie Protocole Réseau pour Micro:bit
 
-Auteur·ice : Vincent Namy
+Auteur·ice : Joshua Cook, Marc Dufey et Natasha
 Version : 1.0
 Date : 29.01.25
 '''
@@ -76,6 +76,13 @@ def int_to_bytes(intPayload:List[int]):
 
 #### Fonctions réseaux ####
 def msg_to_trame(rawMsg : Message):
+    trame=[]
+    trame.append(destId)
+    trame.append(userId)
+    trame.append(x)#Num de séquence a ajouter
+    trame.append(y)#type de Msg a ajouter
+    trame.append(int_to_bytes(rawMsg))
+
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
