@@ -79,8 +79,8 @@ def msg_to_trame(rawMsg : Message):
     trame=[]
     trame.append(destId)
     trame.append(userId)
-    trame.append(x)#Num de séquence a ajouter
-    trame.append(y)#type de Msg a ajouter
+    trame.append(seqNum)#Num de séquence a ajouter
+    trame.append(msgType)#type de Msg a ajouter
     trame.append(rawMsg)
     trame=int_to_bytes(trame)
     '''
