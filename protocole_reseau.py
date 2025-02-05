@@ -152,6 +152,7 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     msg=Message(dest,userId,seqNum,msgId,payload,0)
     msg=msg_to_frame(msg)
     radio.send_bytes(msg)
+    
     '''
     Envoie un message.
     1) Crée un objet Message à partir des paramètres
