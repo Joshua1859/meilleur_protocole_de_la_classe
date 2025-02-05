@@ -2,7 +2,7 @@
 OC Robotique 2025
 Template pour librairie Protocole Réseau pour Micro:bit
 
-Auteur·ice : Joshua Cook, Marc Dufey et Natasha
+Auteur·ice : Joshua Cook, Marc Dufey et Natasha Forestier
 Version : 1.0
 Date : 29.01.25
 '''
@@ -101,7 +101,7 @@ def trame_to_msg(trame : bytes, userId :int):
         userId=msg[1]
         seqNum=msg[2]
         msgType=msg[3]
-        rawMsg=msg[4]
+        rawMag=msg[4]
 
 
 
