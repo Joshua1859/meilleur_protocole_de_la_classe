@@ -75,14 +75,14 @@ def int_to_bytes(intPayload:List[int]):
 
 
 #### Fonctions réseaux ####
-def msg_to_trame(rawMsg : Message):
+def msg_to_frame(rawMsg : Message):
     trame=[]
-    trame.append(destId)
-    trame.append(userId)
-    trame.append(seqNum)#Num de séquence a ajouter
-    trame.append(msgType)#type de Msg a ajouter
-    trame.append(rawMsg)
-    trame=int_to_bytes(trame)
+    frame.append(destId)
+    frame.append(userId)
+    frame.append(seqNum)#Num de séquence a ajouter
+    frame.append(msgType)#type de Msg a ajouter
+    frame.append(rawMsg)
+    frame=int_to_bytes(trame)
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
@@ -92,10 +92,9 @@ def msg_to_trame(rawMsg : Message):
             Returns:
                     trame(bytes): payload convertie au format bytes
     '''
-    pass # à compléter
 
 
-def trame_to_msg(trame : bytes, userId :int):
+def frame_to_msg(frame : bytes, userId :int):
         msg=bytes_to_int(trame)
         destId=msg[0]
         userId=msg[1]
@@ -116,7 +115,6 @@ def trame_to_msg(trame : bytes, userId :int):
             Returns:
                     msgObj(Message): Objet Message contenant tous les paramètres du message recu si crc et destinataire ok, sinon None
     '''
-    pass # à compléter
     
     
 def ack_msg(msg : Message):
@@ -165,6 +163,8 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     pass # à compléter
 
 def receive_msg(userId:int):
+
+
     '''
     Attend un message.
     1) Récupère les messages recus
