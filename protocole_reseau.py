@@ -96,7 +96,12 @@ def msg_to_trame(rawMsg : Message):
 
 
 def trame_to_msg(trame : bytes, userId :int):
-
+        msg=bytes_to_int(trame)
+        destId=msg[0]
+        userId=msg[1]
+        seqNum=msg[2]
+        msgType=msg[3]
+        rawMag=msg[4]
 
 
 
