@@ -81,8 +81,8 @@ def msg_to_trame(rawMsg : Message):
     trame.append(userId)
     trame.append(x)#Num de séquence a ajouter
     trame.append(y)#type de Msg a ajouter
-    trame.append(int_to_bytes(rawMsg))
-
+    trame.append(rawMsg)
+    trame=int_to_bytes(trame)
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
@@ -96,6 +96,11 @@ def msg_to_trame(rawMsg : Message):
 
 
 def trame_to_msg(trame : bytes, userId :int):
+
+
+
+
+
     '''
     Crée un objet Message à partir d'une trame brute recue.
     1) Conversion de bytes en liste de int
