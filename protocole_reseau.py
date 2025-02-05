@@ -76,7 +76,7 @@ def int_to_bytes(intPayload:List[int]):
 
 #### Fonctions réseaux ####
 def msg_to_frame(rawMsg : Message):
-    trame=[]
+    frame=[]
     frame.append(destId)
     frame.append(userId)
     frame.append(seqNum)#Num de séquence a ajouter
