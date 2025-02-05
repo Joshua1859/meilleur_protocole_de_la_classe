@@ -100,7 +100,7 @@ def frame_to_msg(frame : bytes, userId :int):
         userId=msg[1]
         seqNum=msg[2]
         msgType=msg[3]
-        rawMag=msg[4]
+        rawMsg=msg[4]
 
 
 
