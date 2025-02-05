@@ -18,7 +18,7 @@ Timeout = 300
 ackMsgId = 255
 
 #### Start radio module ####
-radio.config(channel=7, address=50)
+radio.config(channel=31, address=31)
 radio.on()
 
 
@@ -38,6 +38,7 @@ class Message:
     self.msgId = msgId
     self.payload = payload
     self.crc = crc
+  
   def msgStr(self):
     '''
     Crée une string contenant les détails du message
@@ -75,7 +76,8 @@ def int_to_bytes(intPayload:List[int]):
 
 
 #### Fonctions réseaux ####
-def msg_to_frame(rawMsg:):
+def msg_to_frame(rawMsg:Message):
+    '''
     frame=[]
     frame.append(destId)
     frame.append(userId)
@@ -84,6 +86,7 @@ def msg_to_frame(rawMsg:):
     frame.append(rawMsg)
     frame.append(ctrlSum)
     frame=int_to_bytes(frame)
+    '''
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
@@ -96,6 +99,7 @@ def msg_to_frame(rawMsg:):
 
 
 def frame_to_msg(frame:bytes, userId:int):
+        '''
         msg=bytes_to_int(frame)
         destId=msg[0]
         userId=msg[1]
@@ -103,8 +107,7 @@ def frame_to_msg(frame:bytes, userId:int):
         msgType=msg[3]
         rawMsg=msg[4]
         ctrlSum=msg[5]
-
-
+        '''
 
 
     '''
@@ -146,6 +149,9 @@ def receive_ack(msg: Msg):
     
 
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
+    msg=Message(dest,userId,seqNum,msgId,payload,0)
+    msg=msg_to_frame(msg)
+    radio.send_bytes(msg)
     '''
     Envoie un message.
     1) Crée un objet Message à partir des paramètres
@@ -165,7 +171,9 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     pass # à compléter
 
 def receive_msg(userId:int):
-
+    While True:
+        radio.receive_bytes
+        
 
     '''
     Attend un message.
