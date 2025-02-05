@@ -75,14 +75,15 @@ def int_to_bytes(intPayload:List[int]):
 
 
 #### Fonctions réseaux ####
-def msg_to_frame(rawMsg : Message):
+def msg_to_frame(rawMsg:):
     frame=[]
     frame.append(destId)
     frame.append(userId)
     frame.append(seqNum)#Num de séquence a ajouter
     frame.append(msgType)#type de Msg a ajouter
     frame.append(rawMsg)
-    frame=int_to_bytes(trame)
+    frame.append(ctrlSum)
+    frame=int_to_bytes(frame)
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
@@ -94,13 +95,14 @@ def msg_to_frame(rawMsg : Message):
     '''
 
 
-def frame_to_msg(frame : bytes, userId :int):
-        msg=bytes_to_int(trame)
+def frame_to_msg(frame:bytes, userId:int):
+        msg=bytes_to_int(frame)
         destId=msg[0]
         userId=msg[1]
         seqNum=msg[2]
         msgType=msg[3]
         rawMsg=msg[4]
+        ctrlSum=msg[5]
 
 
 
