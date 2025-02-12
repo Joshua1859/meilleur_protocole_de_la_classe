@@ -18,7 +18,7 @@ Timeout = 300
 ackMsgId = 255
 
 #### Start radio module ####
-radio.config(channel=7, address=50)
+radio.config(channel=31, address=31)
 radio.on()
 
 
@@ -38,6 +38,7 @@ class Message:
     self.msgId = msgId
     self.payload = payload
     self.crc = crc
+  
   def msgStr(self):
     '''
     Crée une string contenant les détails du message
@@ -75,14 +76,17 @@ def int_to_bytes(intPayload:List[int]):
 
 
 #### Fonctions réseaux ####
-def msg_to_frame(rawMsg : Message):
+def msg_to_frame(rawMsg:Message):
+    '''
     frame=[]
     frame.append(destId)
     frame.append(userId)
     frame.append(seqNum)#Num de séquence a ajouter
     frame.append(msgType)#type de Msg a ajouter
     frame.append(rawMsg)
-    frame=int_to_bytes(trame)
+    frame.append(ctrlSum)
+    frame=int_to_bytes(frame)
+    '''
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
@@ -94,13 +98,23 @@ def msg_to_frame(rawMsg : Message):
     '''
 
 
+<<<<<<< HEAD
 def frame_to_msg(frame : bytes, userId :int):
+=======
+def frame_to_msg(frame:bytes, userId:int):
+        '''
+>>>>>>> 958f53c077f29e52865cab5ad0f534c33658b977
         msg=bytes_to_int(frame)
         destId=msg[0]
         userId=msg[1]
         seqNum=msg[2]
         msgType=msg[3]
         rawMsg=msg[4]
+<<<<<<< HEAD
+=======
+        ctrlSum=msg[5]
+        '''
+>>>>>>> 958f53c077f29e52865cab5ad0f534c33658b977
 
 
     '''
@@ -142,6 +156,10 @@ def receive_ack(msg: Msg):
     
 
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
+    msg=Message(dest,userId,seqNum,msgId,payload,0)
+    msg=msg_to_frame(msg)
+    radio.send_bytes(msg)
+    
     '''
     Envoie un message.
     1) Crée un objet Message à partir des paramètres
@@ -166,7 +184,13 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     
 
 def receive_msg(userId:int):
+<<<<<<< HEAD
     
+=======
+    While True:
+        radio.receive_bytes
+        
+>>>>>>> 958f53c077f29e52865cab5ad0f534c33658b977
 
     '''
     Attend un message.
