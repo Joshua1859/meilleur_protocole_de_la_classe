@@ -95,14 +95,12 @@ def msg_to_frame(rawMsg : Message):
 
 
 def frame_to_msg(frame : bytes, userId :int):
-        msg=bytes_to_int(trame)
+        msg=bytes_to_int(frame)
         destId=msg[0]
         userId=msg[1]
         seqNum=msg[2]
         msgType=msg[3]
         rawMsg=msg[4]
-
-
 
 
     '''
@@ -160,10 +158,15 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
                     acked(bool): True si message acké, sinon False
     '''
     global seqNum
-    pass # à compléter
+    
+    frame=[msgId]+payload
+    frame=int_to_bytes(frame)
+    radio.send_bytes(frame)
+
+    
 
 def receive_msg(userId:int):
-
+    
 
     '''
     Attend un message.
@@ -175,21 +178,26 @@ def receive_msg(userId:int):
             Returns:
                     msgRecu(Message): Objet Message contenant tous les paramètres du message
     '''
-    pass # à compléter
+    new_frame=radio.receive()
+    
+    if new_frame:
+        frame=bytes_to_int(new_frame)
+        m=Message(None,None,None,frame[0],frame[1],None)
+        
 
 
 if __name__ == '__main__':
     
-    userId = 0
+    userId = 17
 
     while True:
         # Messages à envoyer
-        destId = 1
+        destId = 81
         if button_a.was_pressed():
             send_msg(1,[60],userId, destId)
-            
 
-                
+
+
         # Reception des messages
         m = receive_msg(userId)        
         if m and m.msgId==1:
