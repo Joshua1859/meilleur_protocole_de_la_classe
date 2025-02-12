@@ -163,16 +163,13 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     '''
     global seqNum
     
-    frame=[msgId]+payload
-    frame=int_to_bytes(frame)
-    radio.send_bytes(frame)
+    msg=[msgId]+payload
+    msg=int_to_bytes(msg)
+    radio.send_bytes(msg)
 
     
 
 def receive_msg(userId:int):
-    while True:
-        radio.receive_bytes()
-
     '''
     Attend un message.
     1) Récupère les messages recus
@@ -183,12 +180,15 @@ def receive_msg(userId:int):
             Returns:
                     msgRecu(Message): Objet Message contenant tous les paramètres du message
     '''
-    new_frame=radio.receive()
+    
+    new_frame=radio.receive_bytes()
     
     if new_frame:
         frame=bytes_to_int(new_frame)
-        m=Message(None,None,None,frame[0],frame[1],None)
+        msg=Message(None,None,None,frame[0],frame[1],None)
         
+        return msg
+    
 
 
 if __name__ == '__main__':
@@ -205,5 +205,5 @@ if __name__ == '__main__':
 
         # Reception des messages
         m = receive_msg(userId)        
-        if m and m.msgId==1:
+        if m and m.msgId==1 and m.payload==60:
             display.show(Image.SQUARE)
