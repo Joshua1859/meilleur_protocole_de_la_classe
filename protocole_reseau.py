@@ -16,6 +16,7 @@ seqNum = 0
 tryTime = 100
 Timeout = 300
 ackMsgId = 255
+crc=0 #temporaire
 
 #### Start radio module ####
 radio.config(channel=31, address=31)
@@ -77,16 +78,14 @@ def int_to_bytes(intPayload:List[int]):
 
 #### Fonctions réseaux ####
 def msg_to_frame(rawMsg:Message):
-    '''
     frame=[]
-    frame.append(destId)
-    frame.append(userId)
-    frame.append(seqNum)#Num de séquence a ajouter
-    frame.append(msgType)#type de Msg a ajouter
-    frame.append(rawMsg)
-    frame.append(ctrlSum)
+    frame.append(rawMsg.destId)
+    frame.append(rawMsg.userId)
+    frame.append(rawMsg.seqNum)#Num de séquence a ajouter
+    frame.append(rawMsg.msgId)#type de Msg a ajouter
+    frame.append(rawMsg.payload)
+    frame.append(rawMsg.crc)
     frame=int_to_bytes(frame)
-    '''
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
@@ -99,12 +98,8 @@ def msg_to_frame(rawMsg:Message):
 
 def frame_to_msg(frame:bytes, userId:int):
     msg=bytes_to_int(frame)
-    destId=msg[0]
-    userId=msg[1]
-    seqNum=msg[2]
-    msgType=msg[3]
-    rawMsg=msg[4]
-    ctrlSum=msg[5]
+    msg=Message(msg[0],msg[1],msg[2],msg[3],msg[4],msg[5])
+    
 
 
     '''
@@ -145,7 +140,7 @@ def receive_ack(msg: Msg):
     pass # à compléter
     
 
-def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
+def send_msg(msgId:int, payload:List[int], userId:int, destId:int):
     '''
     Envoie un message.
     1) Crée un objet Message à partir des paramètres
@@ -162,8 +157,8 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
                     acked(bool): True si message acké, sinon False
     '''
     global seqNum
-    
-    msg=[msgId]+payload
+    msg=Message(destId,userId,seqNum,msgId,payload,crc)
+    msg=msg_to_frame(msg)
     msg=int_to_bytes(msg)
     radio.send_bytes(msg)
 
@@ -184,8 +179,7 @@ def receive_msg(userId:int):
     new_frame=radio.receive_bytes()
     
     if new_frame:
-        frame=bytes_to_int(new_frame)
-        msg=Message(None,None,None,frame[0],frame[1],None)
+        msg=frame_to_msg(new_frame,userId)
         
         return msg
     
