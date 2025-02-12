@@ -24,21 +24,21 @@ radio.on()
 
 
 #### Classe Message ####
-class Message:
-  def __init__(self, dest:int, exped:int, seqNum:int, msgId:int, payload:List[int], crc:int):
-    '''
-    Constructeur de l'objet Message à partir des paramètres
+'''
+        Constructeur de l'objet Message à partir des paramètres
             Parameters:
                     dest:int, exped:int, seqNum:int, msgId:int, payload:List[int], crc:int
             Returns:
                     self(Message): objet Message contenant les paramètres
-    '''
-    self.exped = exped
-    self.dest = dest
-    self.seqNum = seqNum
-    self.msgId = msgId
-    self.payload = payload
-    self.crc = crc
+'''
+class Message:
+    def __init__(self, dest:int, exped:int, seqNum:int, msgId:int, payload:List[int], crc:int):
+        self.exped = exped
+        self.dest = dest
+        self.seqNum = seqNum
+        self.msgId = msgId
+        self.payload = payload
+        self.crc = crc
   
 def msgStr(self):
     '''
@@ -79,8 +79,8 @@ def int_to_bytes(intPayload:List[int]):
 #### Fonctions réseaux ####
 def msg_to_frame(rawMsg:Message):
     frame=[]
-    frame.append(rawMsg.destId)
-    frame.append(rawMsg.userId)
+    frame.append(rawMsg.dest)
+    frame.append(rawMsg.exped)
     frame.append(rawMsg.seqNum)#Num de séquence a ajouter
     frame.append(rawMsg.msgId)#type de Msg a ajouter
     frame.append(rawMsg.payload)
