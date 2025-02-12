@@ -39,7 +39,7 @@ class Message:
     self.payload = payload
     self.crc = crc
   
-  def msgStr(self):
+def msgStr(self):
     '''
     Crée une string contenant les détails du message
             Parameters:
@@ -47,7 +47,7 @@ class Message:
             Returns:
                     msgStr(str): string contenant les détails du message
     '''
-      return str(self.exped)+ " -> "+ str(self.dest)+ "n[" + str(self.seqNum)+ "] "+ " : type "+ str(self.msgId)+" : " +str(self.payload)+ " (crc="+ str(self.crc)+")"
+    return str(self.exped)+ " -> "+ str(self.dest)+ "n[" + str(self.seqNum)+ "] "+ " : type "+ str(self.msgId)+" : " +str(self.payload)+ " (crc="+ str(self.crc)+")"
 
 #### Toolbox ####
 def bytes_to_int(bytesPayload:bytes):
@@ -98,13 +98,13 @@ def msg_to_frame(rawMsg:Message):
     '''
 
 def frame_to_msg(frame:bytes, userId:int):
-        msg=bytes_to_int(frame)
-        destId=msg[0]
-        userId=msg[1]
-        seqNum=msg[2]
-        msgType=msg[3]
-        rawMsg=msg[4]
-        ctrlSum=msg[5]
+    msg=bytes_to_int(frame)
+    destId=msg[0]
+    userId=msg[1]
+    seqNum=msg[2]
+    msgType=msg[3]
+    rawMsg=msg[4]
+    ctrlSum=msg[5]
 
 
     '''
@@ -146,10 +146,6 @@ def receive_ack(msg: Msg):
     
 
 def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
-    msg=Message(dest,userId,seqNum,msgId,payload,0)
-    msg=msg_to_frame(msg)
-    radio.send_bytes(msg)
-    
     '''
     Envoie un message.
     1) Crée un objet Message à partir des paramètres
@@ -174,8 +170,8 @@ def send_msg(msgId:int, payload:List[int], userId:int, dest:int):
     
 
 def receive_msg(userId:int):
-    While True:
-        radio.receive_bytes
+    while True:
+        radio.receive_bytes()
 
     '''
     Attend un message.
