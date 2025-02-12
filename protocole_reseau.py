@@ -83,7 +83,7 @@ def msg_to_frame(rawMsg:Message):
     frame.append(rawMsg.exped)
     frame.append(rawMsg.seqNum)#Num de séquence a ajouter
     frame.append(rawMsg.msgId)#type de Msg a ajouter
-    frame.append(rawMsg.payload)
+    frame.append(rawMsg.payload[0])
     frame.append(rawMsg.crc)
     frame=int_to_bytes(frame)
     '''
