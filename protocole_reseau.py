@@ -123,8 +123,10 @@ def ack_msg(msg : Message):
             Parameters:
                     msg(Message): Objet Message contenant tous les paramètres du message à acker
     '''
-    pass # à compléter
-
+    ack=Message(msg.userId,msg.destId,msg.seqNum,255,0,0)
+    ack=msg_to_frame(ack)
+    ack=int_to_bytes(ack)
+    radio.send_bytes(ack)
 
 def receive_ack(msg: Msg):
     '''
@@ -137,7 +139,11 @@ def receive_ack(msg: Msg):
             Returns:
                     acked(bool): True si message acké, sinon False
     '''
-    pass # à compléter
+    new_frame=radio.receive_bytes()
+    if new_frame:
+        msg=frame_to_msg(new_frame,userId)
+        if msg[3]==255:
+            return True
     
 
 def send_msg(msgId:int, payload:List[int], userId:int, destId:int):
@@ -157,10 +163,14 @@ def send_msg(msgId:int, payload:List[int], userId:int, destId:int):
                     acked(bool): True si message acké, sinon False
     '''
     global seqNum
-    msg=Message(destId,userId,seqNum,msgId,payload,crc)
-    msg=msg_to_frame(msg)
-    msg=int_to_bytes(msg)
-    radio.send_bytes(msg)
+    t0=running_time()
+    while not acked and  0 < running_time()-t0 < 300:
+        msg=Message(destId,userId,seqNum,msgId,payload,crc)
+        acked=receive_ack(msg)
+        msg=msg_to_frame(msg)
+        msg=int_to_bytes(msg)
+        radio.send_bytes(msg)
+        sleep(50)
 
     
 
@@ -180,7 +190,7 @@ def receive_msg(userId:int):
     
     if new_frame:
         msg=frame_to_msg(new_frame,userId)
-        
+        ack_msg(msg)
         return msg
     
 
