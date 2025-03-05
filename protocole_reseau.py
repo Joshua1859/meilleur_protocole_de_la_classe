@@ -25,11 +25,11 @@ radio.on()
 
 #### Classe Message ####
 '''
-        Constructeur de l'objet Message à partir des paramètres
-            Parameters:
-                    dest:int, exped:int, seqNum:int, msgId:int, payload:List[int], crc:int
-            Returns:
-                    self(Message): objet Message contenant les paramètres
+    Constructeur de l'objet Message à partir des paramètres
+        Parameters:
+                dest:int, exped:int, seqNum:int, msgId:int, payload:List[int], crc:int
+        Returns:
+                elf(Message): objet Message contenant les paramètres
 '''
 class Message:
     def __init__(self, dest:int, exped:int, seqNum:int, msgId:int, payload:List[int], crc:int):
@@ -40,15 +40,15 @@ class Message:
         self.payload = payload
         self.crc = crc
   
-def msgStr(self):
-    '''
-    Crée une string contenant les détails du message
-            Parameters:
-                    self(Message): objet message
-            Returns:
-                    msgStr(str): string contenant les détails du message
-    '''
-    return str(self.exped)+ " -> "+ str(self.dest)+ "n[" + str(self.seqNum)+ "] "+ " : type "+ str(self.msgId)+" : " +str(self.payload)+ " (crc="+ str(self.crc)+")"
+    def msgStr(self):
+        '''
+        Crée une string contenant les détails du message
+                Parameters:
+                        self(Message): objet message
+                Returns:
+                        msgStr(str): string contenant les détails du message
+        '''
+        return str(self.exped)+ " -> "+ str(self.dest)+ "n[" + str(self.seqNum)+ "] "+ " : type "+ str(self.msgId)+" : " +str(self.payload)+ " (crc="+ str(self.crc)+")"
 
 #### Toolbox ####
 def bytes_to_int(bytesPayload:bytes):
@@ -85,7 +85,10 @@ def msg_to_frame(rawMsg:Message):
     frame.append(rawMsg.msgId)#type de Msg a ajouter
     frame.append(rawMsg.payload[0])
     frame.append(rawMsg.crc)
+    print(frame)
     frame=int_to_bytes(frame)
+    print(frame)
+    return frame
     '''
     Crée une trame à partir des paramètres d'un objet Message afin de préparer un envoi.
     1) Création d'une liste de int dans l'ordre du protocole
@@ -123,7 +126,7 @@ def ack_msg(msg : Message):
             Parameters:
                     msg(Message): Objet Message contenant tous les paramètres du message à acker
     '''
-    ack=Message(msg.userId,msg.destId,msg.seqNum,255,0,0)
+    ack=Message(msg.userId,msg.destId,seqNum,ackMsgId,0,0)
     ack=msg_to_frame(ack)
     ack=int_to_bytes(ack)
     radio.send_bytes(ack)
@@ -164,8 +167,11 @@ def send_msg(msgId:int, payload:List[int], userId:int, destId:int):
     '''
     global seqNum
     t0=running_time()
-    while not acked and  0 < running_time()-t0 < 300:
+    acked = False
+    print("a")
+    while not acked :#and  running_time()-t0 < Timeout:
         msg=Message(destId,userId,seqNum,msgId,payload,crc)
+        print("s")
         acked=receive_ack(msg)
         msg=msg_to_frame(msg)
         msg=int_to_bytes(msg)
